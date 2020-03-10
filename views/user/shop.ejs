@@ -1,0 +1,36 @@
+<%- include('../layouts/header.ejs') %>
+
+
+<%- include('../layouts/nav-user.ejs') %>
+
+
+<div class="card-columns">
+
+    <!-- start of product display -->
+    <% for(let product of products) {%>
+    <div class="card text-center h-100">
+      <img class="card-img-top" src="<%= product.imageUrl%>" alt="<%= product.title%>">
+      <div class="card-body">
+        <h5 class="card-title">$<%= product.price%> </h5>
+        <p class="card-text"><%= product.title%></p>
+       
+      </div>
+      <div class="card-footer">
+        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target=".bd-example-modal-lg"
+           data-imageUrl="<%= product.imageUrl%>"   data-title=<%= product.title%> data-price=<%= product.price%> 
+           data-quantity=<%= product.quantity%> data-description='<%= product.description%> '
+           id='productDetailBtn'>Detail</button>
+  
+          <form action="/user/addtocart" method="post">
+          <input type="text" value=<%= product._id%> name='id' hidden>
+          <button class="btn btn-outline-danger btn-sm" type="submit">Add to Cart</button>
+          </form>
+        
+      </div>
+    </div>
+    <%  }%>
+    <!-- end of product display -->
+  </div>
+  
+  </div>
+  </body>
