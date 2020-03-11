@@ -1,5 +1,6 @@
 const express = require('express');
 
+
 const {
   getAllProducts,
   addProductForm,
@@ -8,16 +9,19 @@ const {
   deleteProduct
 } = require('../controller/admin');
 
+
+const {protect,authorize} = require('../middleware/auth')
+
 const router = express.Router();
 
-router.get(['/', '/products'], getAllProducts);
+router.get(['/', '/products'],getAllProducts);
 
-router.get('/addproduct', addProductForm);
-router.post('/addproduct', createProducts);
+router.get('/addproduct', protect,authorize('admin'),addProductForm);
+router.post('/addproduct', protect,authorize('admin'),createProducts);
 
-router.post('/editproduct', editProduct);
+router.post('/editproduct',protect,authorize('admin'), editProduct);
 
 
-router.post('/deleteProduct', deleteProduct);
+router.post('/deleteProduct', protect,authorize('admin'), deleteProduct);
 
 module.exports = router;

@@ -2,25 +2,32 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const session = require('express-session');
 
 const adminRoute = require('./route/admin');
 const userRoute = require('./route/user');
-
+const authRoute = require('./route/auth');
 const app = express();
 
 app.set('view engine', 'ejs');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(
+  session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true
+  })
+);
+
 app.use('/images', express.static(path.join(__dirname, 'public', 'images')));
 app.use('/css', express.static(path.join(__dirname, 'public', 'css')));
 app.use('/js', express.static(path.join(__dirname, 'public', 'javaScript')));
 
+app.use(authRoute);
 app.use('/admin', adminRoute);
 app.use(userRoute);
-
-
-
 
 app.use((req, res, next) => {
   res.render('404');
@@ -32,6 +39,7 @@ mongoose
     useUnifiedTopology: true
   })
   .then(() => {
+    console.log('db connected ......');
     app.listen(5000, () => {
       console.log('Server listening on http://localhost:5000');
     });

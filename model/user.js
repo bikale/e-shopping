@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-ObjectId = require('mongodb').ObjectID;
+const ObjectId = require('mongodb').ObjectID;
 const Schema = mongoose.Schema;
 const userSchema = new Schema({
   name: {
@@ -25,7 +25,8 @@ const userSchema = new Schema({
         quantity: { type: Number, required: true }
       }
     ]
-  }
+  },
+  roles: String
 });
 
 userSchema.methods.addItemToCart = async function(itemId) {
@@ -51,6 +52,20 @@ userSchema.methods.addItemToCart = async function(itemId) {
         );
       }
     });
+};
+
+userSchema.methods.deleteItemFromCart = async function(itemId) {
+  const userId = this._id;
+  await this.model('User')
+    .updateOne(
+      { _id: ObjectId(this._id), 'cart.items.productId': itemId },
+      {
+        $inc: {
+          'cart.items.$.quantity': -1
+        }
+      }
+    )
+    .then(console.log);
 };
 
 module.exports = mongoose.model('User', userSchema);
