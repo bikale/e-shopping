@@ -4,7 +4,8 @@ const {
   getAllProducts,
   addToCart,
   getUserCart,
-  deleteCartItem
+  deleteCartItem,
+  paymentForm
 } = require('../controller/user');
 
 const { protect, authorize } = require('../middleware/auth');
@@ -15,7 +16,9 @@ router.get(['/', '/user'], getAllProducts);
 
 router.post('/user/addtocart', protect, authorize('user'), addToCart);
 
-router.get('/user/cart/:userId', protect, authorize('user'), getUserCart);
+router.get('/user/cart', protect, authorize('user'), getUserCart);
+
+router.get('/user/payment', protect, authorize('user'), paymentForm);
 
 router.get(
   '/user/deleteCartItem/:productid',

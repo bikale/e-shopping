@@ -3,15 +3,22 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const session = require('express-session');
+const flash = require('connect-flash');
+const cookieParser = require('cookie-parser');
 
 const adminRoute = require('./route/admin');
 const userRoute = require('./route/user');
 const authRoute = require('./route/auth');
+
 const app = express();
 
 app.set('view engine', 'ejs');
 
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// Cookie parser
+app.use(cookieParser());
 
 app.use(
   session({
@@ -20,6 +27,8 @@ app.use(
     saveUninitialized: true
   })
 );
+
+app.use(flash());
 
 app.use('/images', express.static(path.join(__dirname, 'public', 'images')));
 app.use('/css', express.static(path.join(__dirname, 'public', 'css')));
@@ -39,7 +48,7 @@ mongoose
     useUnifiedTopology: true
   })
   .then(() => {
-    console.log('db connected ......');
+    console.log('db Connected .....');
     app.listen(5000, () => {
       console.log('Server listening on http://localhost:5000');
     });

@@ -1,4 +1,7 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
 const ObjectId = require('mongodb').ObjectID;
 const Schema = mongoose.Schema;
 const userSchema = new Schema({
@@ -66,6 +69,14 @@ userSchema.methods.deleteItemFromCart = async function(itemId) {
       }
     )
     .then(console.log);
+};
+
+// Sign JWT and return
+
+userSchema.methods.getSignedJwtToken = function() {
+  return jwt.sign({ id: this._id }, 'asdfrewq', {
+    expiresIn: '30d'
+  });
 };
 
 module.exports = mongoose.model('User', userSchema);
