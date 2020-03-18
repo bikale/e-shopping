@@ -60,15 +60,29 @@ userSchema.methods.addItemToCart = async function(itemId) {
 userSchema.methods.deleteItemFromCart = async function(itemId) {
   const userId = this._id;
   await this.model('User')
-    .updateOne(
-      { _id: ObjectId(this._id), 'cart.items.productId': itemId },
-      {
-        $inc: {
-          'cart.items.$.quantity': -1
+    .findOne({ _id: ObjectId(userId) })
+    .then(async userDetail => {
+      userDetail.cart.items = userDetail.cart.items.filter(item => {
+        if (item.productId == itemId) {
+          if (item.quantity == 1) {
+            return false;
+          } else item.quantity -= 1;
         }
-      }
-    )
-    .then(console.log);
+        return item;
+      });
+      await userDetail.save();
+    });
+
+  // await this.model('User')
+  //   .updateOne(
+  //     { _id: ObjectId(this._id), 'cart.items.productId': itemId },
+  //     {
+  //       $inc: {
+  //         'cart.items.$.quantity': -1
+  //       }
+  //     }
+  //   )
+  //   .then(console.log);
 };
 
 // Sign JWT and return

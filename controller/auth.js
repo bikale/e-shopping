@@ -56,10 +56,12 @@ exports.login = async (req, res, next) => {
     return;
   }
 
-
-
   // Create token
   const token = user.getSignedJwtToken();
+
+  // assiging the redirect page after login by the roles
+  let redirectPage = '/';
+  if (user.roles == 'admin') redirectPage = '/admin';
 
   //create cookie and send response
   res
@@ -67,7 +69,7 @@ exports.login = async (req, res, next) => {
       expires: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000), // 15 days from now
       secure: false
     })
-    .redirect('/');
+    .redirect(redirectPage);
 };
 
 // @desc      Log user out / clear cookie

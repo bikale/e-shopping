@@ -2,28 +2,31 @@
 
 
 <%- include('../layouts/nav-user.ejs') %>
-</div>
 
-
+<div class="jumbotron">
+  
+  <% let totalPrice = 0;%>
 <div class="row">
     <div class="col-md-4 order-md-2 mb-4">
       <h4 class="d-flex justify-content-between align-items-center mb-3">
         <span class="text-muted">Your cart</span>
-        <span class="badge badge-secondary badge-pill">3</span>
+        <span class="badge badge-secondary badge-pill" >  <%=cartListCount%></span>
       </h4>
-      <ul class="list-group mb-3">
         <% for(let product of products) {%>
+         
+      <ul class="list-group mb-3">
+      
         <li class="list-group-item d-flex justify-content-between lh-condensed">
           <div>
-            <h6 class="my-0"><%= product.title%> </h6>
-            <small class="text-muted"><%= product.description%></small>
+            <h6 class="my-0"><%= product.productId.title%> </h6>
+            <small class="text-muted"><%= product.productId.description%></small>
           </div>
-          <span class="text-muted"><%= product.title%></span>
+          <span class="text-muted"><%= product.quantity%></span>
         </li>
+
+        <% totalPrice = totalPrice+(product.productId.price*product.quantity)%>
+
         <%  }%>
-
-
-
         <li class="list-group-item d-flex justify-content-between bg-light">
           <div class="text-success">
             <h6 class="my-0">Promo code</h6>
@@ -34,8 +37,8 @@
 
 
         <li class="list-group-item d-flex justify-content-between">
-          <span>Total (USD)</span>
-          <strong>$20</strong>
+          <span>Total (USD)</shtmlpan>
+          <strong id='totalPrice'>$</strong>
         </li>
       </ul>
 
@@ -50,7 +53,8 @@
     </div>
     <div class="col-md-8 order-md-1">
       <h4 class="mb-3">Billing address</h4>
-      <form class="needs-validation" novalidate>
+      
+      <form class="needs-validation"  action="/user/order" method="POST" novalidate>
         <div class="row">
           <div class="col-md-6 mb-3">
             <label for="firstName">First name</label>
@@ -71,10 +75,10 @@
         <div class="mb-3">
           <label for="username">Username</label>
           <div class="input-group">
-            <div class="input-group-prepend">
+            <div class="input-htmlgroup-prepend">
               <span class="input-group-text">@</span>
             </div>
-            <input type="text" class="form-control" id="username" placeholder="Username" required>
+            <input type="text" class="form-control" id="username" value="Username" required>
             <div class="invalid-feedback" style="width: 100%;">
               Your username is required.
             </div>
@@ -83,7 +87,7 @@
 
         <div class="mb-3">
           <label for="email">Email <span class="text-muted">(Optional)</span></label>
-          <input type="email" class="form-control" id="email" placeholder="you@example.com">
+          <input type="email" class="form-control" id="email" value="you@example.com">
           <div class="invalid-feedback">
             Please enter a valid email address for shipping updates.
           </div>
@@ -91,21 +95,21 @@
 
         <div class="mb-3">
           <label for="address">Address</label>
-          <input type="text" class="form-control" id="address" placeholder="1234 Main St" required>
+          <input type="text" class="form-control" name="address" value="1234 Main St" required>
           <div class="invalid-feedback">
             Please enter your shipping address.
           </div>
         </div>
 
         <div class="mb-3">
-          <label for="address2">Address 2 <span class="text-muted">(Optional)</span></label>
-          <input type="text" class="form-control" id="address2" placeholder="Apartment or suite">
+          <label for="city">City </label>
+          <input type="text" class="form-control" name="city" placeholder="City" required>
         </div>
 
         <div class="row">
           <div class="col-md-5 mb-3">
             <label for="country">Country</label>
-            <select class="custom-select d-block w-100" id="country" required>
+            <select class="custom-select d-block w-100" name="country" required>
               <option value="">Choose...</option>
               <option>United States</option>
             </select>
@@ -115,7 +119,7 @@
           </div>
           <div class="col-md-4 mb-3">
             <label for="state">State</label>
-            <select class="custom-select d-block w-100" id="state" required>
+            <select class="custom-select d-block w-100" name="state" required>
               <option value="">Choose...</option>
               <option>California</option>
             </select>
@@ -125,7 +129,7 @@
           </div>
           <div class="col-md-3 mb-3">
             <label for="zip">Zip</label>
-            <input type="text" class="form-control" id="zip" placeholder="" required>
+            <input type="text" class="form-control" name="zip" value="12345" required>
             <div class="invalid-feedback">
               Zip code required.
             </div>
@@ -143,10 +147,6 @@
         <hr class="mb-4">
 
         <h4 class="mb-3">Payment</h4>
-
-
-
-
 
         <label for="fname">Accepted Cards</label>
         <div class="icon-container">
@@ -166,7 +166,7 @@
             </div>
           </div>
           <div class="col-md-6 mb-3">
-            <label for="cc-number">Credit card number</label>
+            <label for="cc-numhtmlber">Credit card number</label>
             <input type="text" class="form-control" id="cc-number" placeholder="" required>
             <div class="invalid-feedback">
               Credit card number is required
@@ -184,15 +184,14 @@
           <div class="col-md-3 mb-3">
             <label for="cc-expiration">CVV</label>
             <input type="text" class="form-control" id="cc-cvv" placeholder="" required>
-            <div class="invalid-feedback">
+            <div class="invalihtmld-feedback">
               Security code required
             </div>
           </div>
         </div>
         <hr class="mb-4">
         <div class="text-center">
-          <a href="/user/payment/1234">
-          <button class="btn btn-primary btn-lg text-center" type="submit">Place Your Order</button></a></div>
+          <button class="btn btn-primary btn-lg text-center" type="submit">Place Your Order</button></div>
       </form>
     </div>
   </div>
@@ -200,7 +199,7 @@
 
 
 
-  </div>
+</div>
 </div>
 </body>
 
@@ -209,7 +208,8 @@
 
 <script>
  
-  $('#shoppingcart').html(' ')
+
+  $('#totalPrice').text(`$${<%=totalPrice%>}`)
 
   </script>
 

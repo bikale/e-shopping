@@ -4,8 +4,18 @@
 <%- include('../layouts/nav-user.ejs') %>
 
 
-<div class="card-columns">
 
+  <% if (products.length==0) { %>
+    <div class="card mb-3 text-center border-0" style="max-width: 50rem;">
+      <img class="card-img-top" src="/images/emptycart.png" alt="emptycart">
+      <div class="card-body">
+        <a href="/user" class="btn btn-primary">Go Shopping</a>
+        
+      </div>
+    </div>
+  <% } %>
+
+  <div class="card-columns">
     <!-- start of product display -->
     <% for(let product of products) {%>
     <div class="card text-center h-100">
@@ -25,9 +35,18 @@
     <!-- end of product display -->
   </div>
   
-  <div class="text-center">
+  <div class="text-center" id='checkOutBtn' style="display: block;">
     <a href="/user/payment">
     <button class="btn btn-primary btn-lg text-center" type="submit">Continue to checkout</button></a></div>
 
   </div>
   </body>
+
+  <script>
+
+if( <%= products.length%> ==0){
+  $('#checkOutBtn').hide();
+}
+
+
+  </script>
